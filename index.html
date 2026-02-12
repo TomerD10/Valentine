@@ -3,161 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Dare for You... 😏</title>
+    <title>Will You Be My Valentine?</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Keeps text at the top */
+            justify-content: center;
             height: 100vh;
             margin: 0;
-            padding-top: 50px;
             background-color: #ffdeeb;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-        }
-
-        #text-content {
-            z-index: 1000; /* Ensures text stays above everything */
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             text-align: center;
         }
 
-        h1 { color: #d63384; margin: 0; }
-        #subText { color: #ff4d8d; font-weight: bold; margin-top: 10px; }
-
-        .gif-container img {
-            width: 150px;
-            border-radius: 15px;
-            margin-top: 15px;
+        #container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        /* This area contains the buttons so they don't overlap the text */
-        #game-area {
-            position: relative;
-            width: 100%;
-            height: 60vh;
+        h1 {
+            color: #d63384;
+            margin-bottom: 20px;
+        }
+
+        .gif-container img {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
             display: flex;
+            gap: 20px;
             justify-content: center;
             align-items: center;
+            min-height: 100px;
         }
 
         button {
-            padding: 15px 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             border: none;
-            border-radius: 15px;
+            border-radius: 10px;
             cursor: pointer;
-            position: absolute; /* Allows for floating/stacking */
-            transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         #yesBtn {
             background-color: #4caf50;
             color: white;
-            z-index: 1; /* Yes is the background */
-            min-width: 120px;
         }
 
         #noBtn {
             background-color: #f44336;
             color: white;
-            z-index: 2; /* No floats ON TOP of Yes */
         }
 
         #successMessage {
             display: none;
-            text-align: center;
-            z-index: 2000;
         }
     </style>
 </head>
 <body>
 
-    <div id="text-content">
+    <div id="container">
         <div id="valentine-question">
-            <h1>Will you be my Valentine? ❤️</h1>
-            <p id="subText">I dare you to press no... 😏</p>
             <div class="gif-container">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp4cnEzdXo1Y2I5eWp6Y3R5bmJpZzRreW9reW9reW9reW9reW9reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif">
+                <img id="displayGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp4cnEzdXo1Y2I5eWp6Y3R5bmJpZzRreW9reW9reW9reW9reW9reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute bear">
             </div>
+            <h1>Will you be my Valentine? ❤️</h1>
+            <div class="buttons">
+                <button id="yesBtn">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div id="successMessage">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzhpZ3p4bmJpZzRreW9reW9reW9reW9reW9reW9reW9reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9IbxxvDUQM/giphy.gif" alt="Happy Cat">
+            <h1>Yay!!! See you on the 14th! 🥰</h1>
         </div>
     </div>
 
-    <div id="game-area">
-        <button id="yesBtn">Yes</button>
-        <button id="noBtn">No</button>
-    </div>
-
-    <div id="successMessage">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzhpZ3p4bmJpZzRreW9reW9reW9reW9reW9reW9reW9reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9IbxxvDUQM/giphy.gif">
-        <h1 style="font-size: 3rem;">I KNEW IT! ❤️</h1>
-        <p style="color: #d63384; font-size: 1.5rem; font-weight: bold;">See you on the 14th! 🥰</p>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
-        const subText = document.getElementById('subText');
-        const gameArea = document.getElementById('game-area');
+        const questionSection = document.getElementById('valentine-question');
+        const successSection = document.getElementById('successMessage');
 
         let noClickCount = 0;
 
-        const phrases = [
-            "No", "Are you sure? 🤨", "No is not an option! 😤", 
-            "Catch me if you can!", "Getting smaller...", 
-            "Almost gone!", "I'm hiding!", "Click the green!"
-        ];
-
-        noBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevents clicking "Yes" accidentally on the very first frame
+        noBtn.addEventListener('click', () => {
             noClickCount++;
             
-            // 1. Shrink No
-            const noScale = Math.max(0.1, 1 - (noClickCount * 0.12));
+            // 1. Shrink the No button
+            const noScale = Math.max(0.2, 1 - (noClickCount * 0.15));
             noBtn.style.transform = `scale(${noScale})`;
 
-            // 2. Grow Yes
-            const yesScale = 1 + (noClickCount * 1.2);
+            // 2. Grow the Yes button
+            const yesScale = 1 + (noClickCount * 0.5);
             yesBtn.style.transform = `scale(${yesScale})`;
 
-            // 3. Move No inside Yes
-            // We calculate the boundaries of the Yes button to keep No inside it
-            const yesRect = yesBtn.getBoundingClientRect();
-            const padding = 20;
-            
-            // Random position inside the current size of the Yes button
-            const newLeft = (Math.random() * (yesRect.width - padding*4)) + (yesRect.left + padding);
-            const newTop = (Math.random() * (yesRect.height - padding*4)) + (yesRect.top + padding);
+            // 3. Move the No button slightly so it's harder to click
+            const x = Math.random() * 20 - 10;
+            const y = Math.random() * 20 - 10;
+            noBtn.style.translate = `${x}px ${y}px`;
 
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = `${newLeft}px`;
-            noBtn.style.top = `${newTop}px`;
-
-            // 4. Update text
+            // Optional: Change text of No button
+            const phrases = ["No", "Are you sure?", "Really?", "Think again!", "Last chance!", "Pretty please?"];
             if (noClickCount < phrases.length) {
                 noBtn.innerText = phrases[noClickCount];
             }
-            if (noClickCount === 2) subText.innerText = "Wow, you're persistent! 😂";
-            if (noClickCount === 5) subText.innerText = "It's getting crowded in there... 🟢";
         });
 
         yesBtn.addEventListener('click', () => {
-            document.getElementById('text-content').style.display = 'none';
-            document.getElementById('game-area').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
-            
-            confetti({
-                particleCount: 200,
-                spread: 100,
-                origin: { y: 0.6 }
-            });
+            questionSection.style.display = 'none';
+            successSection.style.display = 'block';
         });
     </script>
 </body>
