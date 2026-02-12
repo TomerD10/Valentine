@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise! ❤️</title>
+    <title>Open Me! ❤️</title>
     <style>
         body {
             display: flex;
@@ -25,17 +25,25 @@
             max-width: 400px;
             width: 90%;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         h1 {
             color: #d63384;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
+            margin-bottom: 10px;
+        }
+
+        #subText {
+            color: #ff4d8d;
+            font-weight: bold;
             margin-bottom: 20px;
+            font-size: 1.1rem;
         }
 
         .gif-container img {
             width: 100%;
-            max-width: 250px;
+            max-width: 200px;
             border-radius: 15px;
             margin-bottom: 20px;
         }
@@ -46,7 +54,6 @@
             justify-content: center;
             align-items: center;
             margin-top: 20px;
-            flex-wrap: wrap;
         }
 
         button {
@@ -62,7 +69,7 @@
         #yesBtn {
             background-color: #4caf50;
             color: white;
-            z-index: 100; /* Ensure it stays on top as it grows */
+            z-index: 999;
         }
 
         #noBtn {
@@ -76,14 +83,13 @@
 
         @keyframes shake {
             0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
             100% { transform: translateX(0); }
         }
 
         .shake-anim {
-            animation: shake 0.3s ease-in-out;
+            animation: shake 0.2s ease-in-out;
         }
     </style>
 </head>
@@ -92,9 +98,10 @@
     <div id="container">
         <div id="valentine-question">
             <div class="gif-container">
-                <img id="displayGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp4cnEzdXo1Y2I5eWp6Y3R5bmJpZzRreW9reW9reW9reW9reW9reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute bear">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp4cnEzdXo1Y2I5eWp6Y3R5bmJpZzRreW9reW9reW9reW9reW9reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute bear">
             </div>
-            <h1 id="mainHeading">Will you be my Valentine? ❤️</h1>
+            <h1>Will you be my Valentine? ❤️</h1>
+            <p id="subText">I dare you to press no... 😏</p>
             <div class="buttons">
                 <button id="yesBtn">Yes</button>
                 <button id="noBtn">No</button>
@@ -103,66 +110,73 @@
 
         <div id="successMessage">
             <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzhpZ3p4bmJpZzRreW9reW9reW9reW9reW9reW9reW9reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9IbxxvDUQM/giphy.gif" alt="Happy Cat">
-            <h1>Yay!!! Best Valentine ever! 🥰</h1>
-            <p style="color: #d63384;">Can't wait for Feb 14th!</p>
+            <h1>I KNEW IT! ❤️</h1>
+            <p style="color: #d63384; font-weight: bold;">See you on the 14th! 🥰</p>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const container = document.getElementById('container');
         const questionSection = document.getElementById('valentine-question');
         const successSection = document.getElementById('successMessage');
-        const mainHeading = document.getElementById('mainHeading');
+        const subText = document.getElementById('subText');
 
         let noClickCount = 0;
 
         const phrases = [
             "No", 
-            "Are you sure? 😉", 
-            "Pffft, click it again!", 
-            "You're missing out!", 
-            "Is that your final answer?", 
-            "Okay, now you're just being mean! 😭", 
-            "Wait, what is happening??", 
-            "Look at the GREEN button!", 
-            "I'm disappearing! Catch me!",
-            "Click YES or else!"
+            "Are you sure it's a no? 🤨", 
+            "I told you no is not an option! 😤", 
+            "You're actually still trying? 😂", 
+            "Look how small I'm getting! 🤏", 
+            "Stop it! Just click the green one! 💚", 
+            "Okay, now you're just being stubborn...", 
+            "I'm literally a pixel now. Bye.", 
+            "Loading 'Yes' protocol...",
+            "Just click YES already! 🙄"
         ];
 
         noBtn.addEventListener('click', () => {
             noClickCount++;
             
-            // 1. Shrink the No button (min size 10%)
-            const noScale = Math.max(0.1, 1 - (noClickCount * 0.1));
+            // 1. Shrink No, Grow Yes
+            const noScale = Math.max(0.1, 1 - (noClickCount * 0.12));
             noBtn.style.transform = `scale(${noScale})`;
 
-            // 2. Grow the Yes button massively
             const yesScale = 1 + (noClickCount * 0.8);
             yesBtn.style.transform = `scale(${yesScale})`;
 
-            // 3. Add shake effect to the card
+            // 2. Shake effect
             container.classList.add('shake-anim');
-            setTimeout(() => container.classList.remove('shake-anim'), 300);
+            setTimeout(() => container.classList.remove('shake-anim'), 200);
 
-            // 4. Update the text to be funny/daring
+            // 3. Update the baiting text
             if (noClickCount < phrases.length) {
                 noBtn.innerText = phrases[noClickCount];
             } else {
-                noBtn.innerText = "Error 404: No not found";
+                noBtn.innerText = "Error: No.exe stopped working";
             }
 
-            // 5. Change heading if she clicks a lot
-            if (noClickCount > 4) {
-                mainHeading.innerText = "Don't be shy, click the BIG button! 👇";
-            }
+            // 4. Update the "I dare you" text after she starts clicking
+            if (noClickCount === 1) subText.innerText = "Wait, you actually did it?! 😱";
+            if (noClickCount === 3) subText.innerText = "You're really persistent, huh? 😂";
+            if (noClickCount === 6) subText.innerText = "Okay, the green button is right there... 🙄";
         });
 
         yesBtn.addEventListener('click', () => {
             questionSection.style.display = 'none';
             successSection.style.display = 'block';
-            // Optional: confetti or a sound could go here
+            
+            // Trigger Confetti!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff0000', '#ff69b4', '#ffffff']
+            });
         });
     </script>
 </body>
